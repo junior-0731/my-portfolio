@@ -1,0 +1,13 @@
+---
+/**
+ * Texto bilingüe. Renderiza en español y guarda la versión en inglés
+ * en data-attributes; el cambio de idioma ocurre en el cliente sin recargar.
+ */
+import type { HTMLTag } from "astro/types";
+import type { T } from "@/data/portfolio";
+interface Props { t: T; html?: boolean; as?: HTMLTag; class?: string; [k: string]: unknown }
+const { t, html = false, as: Tag = "span", class: cls, ...rest } = Astro.props;
+---
+{html
+  ? <Tag class={cls} data-es={t.es} data-en={t.en} data-html {...rest} set:html={t.es} />
+  : <Tag class={cls} data-es={t.es} data-en={t.en} {...rest}>{t.es}</Tag>}

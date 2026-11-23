@@ -1,0 +1,63 @@
+---
+import Tx from "./Tx.astro";
+import { ui2, whatsapp } from "@/data/casos";
+import { site } from "@/data/portfolio";
+const chips = [
+  { es: "ayuda", en: "help" },
+  { es: "sobre-mi", en: "about" },
+  { es: "stack", en: "stack" },
+  { es: "contacto", en: "contact" },
+  { es: "cafe", en: "coffee" },
+  { es: "matrix", en: "matrix" },
+];
+const wa = (t: string) => `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(t)}`;
+---
+<section class="play" id="terminal" data-gl="dim" aria-labelledby="play-title">
+  <div class="play-head">
+    <Tx as="h2" class="h2" id="play-title" html t={ui2.playTitle} />
+    <Tx as="p" t={ui2.playP} />
+  </div>
+
+  <div class="term" id="term" data-reveal
+    data-email={site.contact.email} data-linkedin={site.contact.linkedin} data-github={site.contact.github}
+    data-wa-es={wa(whatsapp.text.es)} data-wa-en={wa(whatsapp.text.en)}>
+    <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span class="mono">junior@portfolio: ~</span></div>
+    <div class="out mono" id="term-out" role="log" aria-live="polite" data-lenis-prevent></div>
+    <form class="in mono" id="term-form" autocomplete="off">
+      <label for="term-input" class="pr">junior@portfolio:~$</label>
+      <input id="term-input" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="send" maxlength="60" placeholder="ayuda · help" />
+    </form>
+    <div class="chips" aria-label="Comandos">
+      {chips.map((c) => <button type="button" class="chip mono" data-cmd-es={c.es} data-cmd-en={c.en}><Tx t={c} /></button>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .play { padding: 6vh var(--gutter) 10vh; position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(24px, 4vw, 64px); align-items: center }
+  .play-head :global(.h2) { font-size: clamp(36px, 4.6vw, 72px); max-width: 12ch }
+  .play-head > :global(p) { color: var(--dim); max-width: 38ch; margin-top: 18px; font-size: 15.5px }
+
+  .term { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #0b0c0d; box-shadow: 0 40px 90px -50px rgba(227, 154, 69, .35); position: relative }
+  .bar { display: flex; align-items: center; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--line); background: #121416 }
+  .bar i { width: 10px; height: 10px; border-radius: 50%; background: #2a2e32 }
+  .bar i:nth-child(1) { background: #ff6159 } .bar i:nth-child(2) { background: #ffbd2e } .bar i:nth-child(3) { background: #28c941 }
+  .bar span { margin-left: 10px; font-size: 11.5px; color: var(--dim) }
+  .out, .in { text-transform: none; letter-spacing: 0 }
+  .in input::placeholder { color: var(--mute) }
+  .out { height: 300px; overflow-y: auto; padding: 16px 18px 6px; font-size: 13.5px; line-height: 1.6; color: #c9ced3; scrollbar-width: thin; position: relative }
+  .out :global(.ln) { white-space: pre-wrap; word-break: break-word }
+  .out :global(.cmd) { color: var(--ink) } .out :global(.cmd b) { color: var(--amber); font-weight: 500 }
+  .out :global(.acc) { color: var(--amber) } .out :global(.ok) { color: var(--ok) } .out :global(.dim) { color: var(--dim) } .out :global(.err) { color: #ff7a6b }
+  .out :global(a) { color: var(--amber); text-decoration: underline; text-underline-offset: 3px }
+  .out :global(canvas) { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none }
+  .in { display: flex; align-items: center; gap: 10px; padding: 10px 18px 14px; font-size: 13.5px }
+  .pr { color: var(--amber); flex: none }
+  .in input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--ink); font: inherit; caret-color: var(--amber) }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px 16px; border-top: 1px solid var(--line) }
+  .chip { font-size: 11.5px; padding: 6px 11px; border-radius: 99px; border: 1px solid var(--line-strong); color: var(--titanium); transition: border-color .25s, color .25s, background .25s }
+  .chip:hover, .chip:focus-visible { border-color: var(--amber); color: var(--amber); background: rgba(227, 154, 69, .08) }
+
+  @media (max-width: 900px) { .play { grid-template-columns: 1fr } }
+  @media (max-width: 640px) { .out { height: 260px; font-size: 12.5px; padding: 14px } .in { font-size: 12.5px; padding: 10px 14px 12px } .pr { font-size: 12px } .chips { padding: 10px 14px 14px } }
+</style>

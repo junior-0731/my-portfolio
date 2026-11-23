@@ -1,0 +1,56 @@
+---
+import Tx from "./Tx.astro";
+import { cvs, ui2 } from "@/data/casos";
+---
+<section class="cv" id="cv" data-gl="dim" aria-labelledby="cv-title">
+  <div class="cv-head">
+    <div>
+      <Tx class="eyebrow mono" as="div" t={ui2.cvEyebrow} />
+      <Tx as="h2" class="h2" id="cv-title" html t={ui2.cvTitle} />
+    </div>
+    <Tx as="p" t={ui2.cvP} />
+  </div>
+  <div class="docs">
+    {cvs.map((c) => (
+      <article class="doc" data-reveal>
+        <div class="paper"><img src={c.thumb} alt="" width="640" height="828" loading="lazy" decoding="async" /></div>
+        <div class="txt">
+          <Tx class="mono tag" t={c.tag} />
+          <Tx as="h3" t={c.title} />
+          <Tx as="p" t={c.desc} />
+          <div class="dl">
+            {c.files.map((f) => (
+              <a href={f.href} download target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14" /></svg>{f.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .cv { padding: 12vh var(--gutter); position: relative; z-index: 1; background: var(--carbon) }
+  .cv-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 48px; flex-wrap: wrap }
+  .cv-head > :global(p) { color: var(--dim); max-width: 40ch }
+  .docs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px }
+  .doc { display: grid; grid-template-columns: minmax(0, 200px) 1fr; gap: 26px; align-items: center; padding: 22px; border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(180deg, rgba(23, 25, 27, .94), rgba(13, 14, 15, .94)); transition: border-color .35s, box-shadow .35s }
+  .doc:hover, .doc:focus-within { border-color: rgba(227, 154, 69, .45); box-shadow: 0 24px 60px -30px rgba(227, 154, 69, .35) }
+  .paper { border-radius: 4px; overflow: hidden; box-shadow: 0 18px 40px -16px #000, 0 0 0 1px rgba(255, 255, 255, .06); transform: rotate(-2deg); transition: transform .6s var(--ease-out) }
+  .doc:nth-child(2) .paper { transform: rotate(2deg) }
+  .doc:hover .paper { transform: rotate(0) translateY(-4px) scale(1.02) }
+  .paper img { width: 100%; height: auto }
+  .txt { display: grid; gap: 10px }
+  .txt :global(.tag) { color: var(--amber) }
+  .txt :global(h3) { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(30px, 2.8vw, 40px); line-height: .95 }
+  .txt > :global(p) { color: var(--dim); font-size: 15px }
+  .dl { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px }
+  .dl a { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 99px; border: 1px solid var(--line-strong); text-decoration: none; font-family: var(--mono); font-size: 12px; transition: border-color .25s, background .25s, color .25s }
+  .dl a:first-child { background: var(--amber); border-color: var(--amber); color: var(--carbon); font-weight: 600 }
+  .dl a:hover { border-color: var(--amber); color: var(--amber); background: transparent }
+  .dl svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+  @media (max-width: 1100px) { .docs { grid-template-columns: 1fr } }
+  @media (max-width: 560px) { .doc { grid-template-columns: 1fr } .paper { max-width: 240px } }
+</style>

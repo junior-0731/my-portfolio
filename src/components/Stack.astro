@@ -1,0 +1,20 @@
+---
+import { stack } from "@/data/portfolio";
+const items = [...stack, ...stack];
+---
+<section class="stack" aria-label="Tecnologías" data-gl="dim">
+  <div class="marquee">
+    {items.map((s, i) => <span aria-hidden={i >= stack.length ? "true" : undefined}>{s}<i> ·</i></span>)}
+  </div>
+</section>
+
+<style>
+  .stack { padding: 6vh 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; background: var(--carbon); position: relative; z-index: 1 }
+  .marquee { display: flex; width: max-content; animation: mq 38s linear infinite }
+  .marquee span { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(30px, 4.4vw, 68px); line-height: 1; padding: 0 .35em; color: transparent; -webkit-text-stroke: 1px var(--mute); white-space: nowrap; transition: color .3s }
+  .marquee span:nth-child(3n+1) { color: var(--ink); -webkit-text-stroke: 0 }
+  .marquee span:hover { color: var(--amber); -webkit-text-stroke: 0 }
+  .marquee i { font-style: normal; color: var(--amber) }
+  .stack:hover .marquee { animation-play-state: paused }
+  @keyframes mq { to { transform: translateX(-50%) } }
+</style>

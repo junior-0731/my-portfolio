@@ -1,0 +1,123 @@
+---
+import Tx from "./Tx.astro";
+import { equipo, ui2 } from "@/data/casos";
+---
+<section class="team" id="equipo" data-gl="dim" aria-labelledby="team-title">
+  <div class="team-head">
+    <div>
+      <Tx class="eyebrow mono" as="div" t={ui2.tmEyebrow} />
+      <Tx as="h2" class="h2" id="team-title" html t={ui2.tmTitle} />
+    </div>
+    <Tx as="p" t={ui2.tmP} />
+  </div>
+
+  <div class="people" style={`--n:${equipo.length}`}>
+    {equipo.map((p, i) => (
+      <a class="person" href={p.href} target="_blank" rel="noopener noreferrer" data-fx={p.fx} style={`--acc:${p.accent}; --i:${i}`}>
+        <div class="ph">
+          <span class="glow" aria-hidden="true"></span>
+          <span class={`fx ${p.fx}`} aria-hidden="true"></span>
+          <img src={`${p.photo}-720.webp`} srcset={`${p.photo}-400.webp 400w, ${p.photo}-720.webp 720w`} sizes="(max-width: 640px) 92vw, 420px"
+            width="720" height="720" alt={p.name} loading="lazy" decoding="async" />
+        </div>
+        <div class="info">
+          <Tx class="mono role" t={p.role} />
+          <b class="name">{p.name}</b>
+          <Tx as="p" class="proj" t={p.project} />
+          <span class="cta mono"><Tx t={ui2.tmCta} /> <span aria-hidden="true">↗</span></span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .team { padding: 10vh var(--gutter) 8vh; position: relative; z-index: 1 }
+  .team-head { display: flex; justify-content: space-between; align-items: end; gap: 24px 48px; padding-bottom: 36px; flex-wrap: wrap }
+  .team-head :global(.h2) { font-size: clamp(36px, 4.6vw, 72px); max-width: 16ch }
+  .team-head > :global(p) { color: var(--dim); max-width: 40ch; font-size: 15px }
+
+  /* cuadrícula que se adapta al número de personas */
+  .people { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 18px; max-width: calc(var(--n) * 300px + (var(--n) - 1) * 18px) }
+
+  .person { --mx: 50%; --my: 30%; position: relative; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; text-decoration: none; color: var(--ink); isolation: isolate;
+    background: #0f1012; border: 1px solid var(--line); transition: border-color .4s, box-shadow .5s, transform .5s var(--ease-out);
+    opacity: 0; transform: translateY(28px) }
+  .people.in .person { opacity: 1; transform: none; transition: opacity .7s var(--ease-out) calc(var(--i) * 120ms), transform .8s var(--ease-out) calc(var(--i) * 120ms), border-color .4s, box-shadow .5s }
+  /* borde iluminado con el color de cada persona */
+  .person::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; z-index: 3; pointer-events: none;
+    background: conic-gradient(from var(--ang, 0deg), transparent 0 60%, var(--acc) 75%, transparent 90%); opacity: 0; transition: opacity .4s;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude }
+
+  .ph { position: relative; aspect-ratio: 1 / 1; overflow: hidden;
+    background: radial-gradient(80% 70% at 50% 100%, color-mix(in srgb, var(--acc) 34%, transparent), transparent 70%), linear-gradient(180deg, #16181b, #0e0f11) }
+  .ph img { position: relative; z-index: 2; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; filter: saturate(1.06) contrast(1.03);
+    transform: scale(1.02); transform-origin: 50% 100%; transition: filter .6s, transform .8s var(--ease-out) }
+  .ph::after { content: ""; position: absolute; inset: auto 0 0; height: 38%; z-index: 3; background: linear-gradient(transparent, #0f1012) }
+  .glow { position: absolute; inset: 0; z-index: 1; background: radial-gradient(40% 40% at var(--mx) var(--my), color-mix(in srgb, var(--acc) 45%, transparent), transparent 70%); opacity: .35; transition: opacity .5s }
+
+  /* efecto propio: líneas de escaneo (backend) */
+  .fx.scan { position: absolute; inset: 0; z-index: 1; opacity: .25; transition: opacity .5s;
+    background: linear-gradient(transparent 0 calc(100% - 1px), color-mix(in srgb, var(--acc) 55%, transparent) calc(100% - 1px)) 0 0 / 100% 22px,
+                linear-gradient(90deg, transparent 0 calc(100% - 1px), color-mix(in srgb, var(--acc) 30%, transparent) calc(100% - 1px)) 0 0 / 22px 100%;
+    -webkit-mask: radial-gradient(70% 60% at 50% 45%, #000, transparent 75%); mask: radial-gradient(70% 60% at 50% 45%, #000, transparent 75%) }
+  .fx.scan::after { content: ""; position: absolute; left: 0; right: 0; height: 30%; top: -30%; background: linear-gradient(transparent, color-mix(in srgb, var(--acc) 35%, transparent)); opacity: 0 }
+  /* efecto propio: halo que gira (full-stack) */
+  .fx.halo { position: absolute; left: 50%; top: 40%; width: 78%; aspect-ratio: 1; z-index: 1; translate: -50% -50%; border-radius: 50%; opacity: .3; transition: opacity .5s;
+    background: conic-gradient(from 0deg, transparent, color-mix(in srgb, var(--acc) 70%, transparent), transparent 40%, color-mix(in srgb, var(--acc) 45%, transparent) 70%, transparent);
+    -webkit-mask: radial-gradient(closest-side, transparent 64%, #000 66% 72%, transparent 74%); mask: radial-gradient(closest-side, transparent 64%, #000 66% 72%, transparent 74%) }
+
+  /* efecto propio: retícula de puntos que respira */
+  .fx.dots { position: absolute; inset: 0; z-index: 1; opacity: .3; transition: opacity .5s;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 75%, transparent) 1.4px, transparent 1.8px) 0 0 / 18px 18px;
+    -webkit-mask: radial-gradient(62% 55% at 50% 42%, #000, transparent 78%); mask: radial-gradient(62% 55% at 50% 42%, #000, transparent 78%) }
+
+  .info { position: relative; z-index: 4; display: grid; gap: 4px; padding: 0 18px 18px; margin-top: -40px }
+  .info :global(.role) { color: var(--acc); font-size: 10.5px }
+  .name { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(22px, 1.8vw, 27px); line-height: .95; letter-spacing: .01em; text-shadow: 0 2px 18px rgba(0, 0, 0, .6) }
+  .info :global(.proj) { color: var(--dim); font-size: 13.5px }
+  .cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; color: var(--ink); width: max-content; padding: 8px 14px; border-radius: 99px; border: 1px solid color-mix(in srgb, var(--acc) 60%, transparent);
+    background: color-mix(in srgb, var(--acc) 12%, transparent); transition: background .3s, color .3s, opacity .4s, transform .4s var(--ease-out) }
+
+  /* activo: cursor o teclado */
+  .person:hover, .person:focus-visible { border-color: color-mix(in srgb, var(--acc) 55%, transparent); box-shadow: 0 30px 80px -40px var(--acc); transform: translateY(-4px) }
+  .person:focus-visible { outline: 2px solid var(--acc); outline-offset: 4px }
+  .person:hover::before, .person:focus-visible::before { opacity: 1; animation: spin 3.2s linear infinite }
+  .person:hover img, .person:focus-visible img { transform: scale(1.06) translateY(-2%) }
+  .person:hover .glow, .person:focus-visible .glow { opacity: 1 }
+  .person:hover .fx, .person:focus-visible .fx { opacity: .75 }
+  .person:hover .fx.scan::after, .person:focus-visible .fx.scan::after { opacity: 1; animation: sweep 1.8s linear infinite }
+  .person:hover .fx.halo, .person:focus-visible .fx.halo { animation: rot 6s linear infinite }
+  .person:hover .fx.dots, .person:focus-visible .fx.dots { animation: breathe 2.4s ease-in-out infinite, drift 9s linear infinite }
+  .person:hover .cta, .person:focus-visible .cta { background: var(--acc); color: #0b0c0d; border-color: var(--acc) }
+  @property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg }
+  @keyframes spin { to { --ang: 360deg } }
+  @keyframes sweep { to { top: 100% } }
+  @keyframes rot { to { rotate: 360deg } }
+  @keyframes breathe { 50% { opacity: .45 } }
+  @keyframes drift { to { background-position: 18px 36px } }
+
+  /* con cursor: la invitación aparece al activar la tarjeta */
+  @media (hover: hover) and (pointer: fine) {
+    .cta { opacity: 0; transform: translateY(6px) }
+    .person:hover .cta, .person:focus-visible .cta { opacity: 1; transform: none }
+  }
+  @media (max-width: 640px) {
+    .team-head { flex-direction: column; align-items: start }
+    .people { max-width: none }
+    /* en celular: tarjeta horizontal y compacta */
+    .person { flex-direction: row; align-items: stretch }
+    .ph { flex: 0 0 112px; width: 112px; aspect-ratio: auto; min-height: 132px }
+    .ph img { position: absolute; inset: 0; object-position: 50% 100% }
+    .ph::after { display: none }
+    .info { margin-top: 0; padding: 12px 16px; gap: 3px }
+    .name { font-size: 22px }
+    .cta { margin-top: 6px; padding: 6px 12px; font-size: 11px }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .person { opacity: 1; transform: none }
+    .person:hover, .person:focus-visible { transform: none }
+    .person:hover::before, .person:focus-visible::before, .person:hover .fx.halo, .person:hover .fx.scan::after, .person:hover .fx.dots, .person:focus-visible .fx.dots { animation: none }
+    .person:hover img, .person:focus-visible img { transform: scale(1.02) }
+  }
+</style>

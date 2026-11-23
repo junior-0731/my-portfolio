@@ -1,0 +1,42 @@
+---
+import "@/styles/global.css";
+import { site } from "@/data/portfolio";
+
+interface Props { title?: string; description?: string }
+const { title = site.title, description = site.description.es } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d0e0f" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL("/og.jpg", Astro.site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Junior Herrera · Power Platform & Full-Stack Developer" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_CO" />
+    <meta name="twitter:image" content={new URL("/og.jpg", Astro.site).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      // idioma guardado + bandera de JS antes del primer pintado (evita parpadeo)
+      try { var l = localStorage.getItem("jh-lang"); if (l === "en") document.documentElement.dataset.lang = "en"; } catch (e) {}
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

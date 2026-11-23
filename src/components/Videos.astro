@@ -1,0 +1,126 @@
+---
+import Tx from "./Tx.astro";
+import { ui, featuredVideo as fv, videos } from "@/data/portfolio";
+const first = fv.variants[0]!;
+---
+<section class="video" id="video" data-gl="dim" aria-labelledby="video-title">
+  <Tx class="eyebrow mono" as="div" t={ui.vdEyebrow} />
+  <Tx as="h2" class="h2" id="video-title" html t={ui.vdTitle} />
+
+  <div class="player paused" id="player" style={`--accent:${first.color}`} data-reveal>
+    <video id="vid" src={first.src} poster={first.poster} muted loop playsinline preload="none" aria-label={fv.title.es}></video>
+    <button type="button" class="unmute mono" id="unmute"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14" /></svg><Tx t={ui.vdSound} /></button>
+    <button type="button" class="bigplay" id="bigplay" aria-label="Play">
+      <span class="ring"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z" /></svg></span>
+    </button>
+    <div class="controls">
+      <button type="button" id="pp" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor" id="ppicon"><path d="M7 4.5v15l13-7.5z" /></svg></button>
+      <button type="button" id="snd" aria-label="Sonido" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="sndicon"><path d="M11 5 6 9H3v6h3l5 4z" /><path d="m22 9-6 6M16 9l6 6" /></svg></button>
+      <span class="mono tnum" id="tc">00:00 / 00:00</span>
+      <input class="prog" id="prog" type="range" min="0" max="1000" value="0" aria-label="Progreso" />
+      {fv.variants.length > 1 && (
+        <div class="palettes" role="group" aria-label="Paleta">
+          {fv.variants.map((v, i) => (
+            <button type="button" class="pal" data-src={v.src} data-poster={v.poster} data-color={v.color}
+              aria-pressed={i === 0 ? "true" : "false"} aria-label={v.label.es} title={v.label.es} style={`--c:${v.color}`}></button>
+          ))}
+        </div>
+      )}
+      <button type="button" id="fs" aria-label="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg></button>
+    </div>
+  </div>
+
+  <div class="chapters" role="group" aria-label="Capítulos">
+    {ui.vdChapters.map((c, i) => (
+      <button type="button" class="chap" data-t={c.t} aria-current={i === 0 ? "true" : "false"}><span class="mono n">{String(i + 1).padStart(2, "0")}</span><Tx t={{ es: c.es, en: c.en }} /><i aria-hidden="true"></i></button>
+    ))}
+  </div>
+
+  {videos.some((v) => v.source) && (<>
+  <Tx as="h4" class="mono more" t={ui.more} />
+  <div class="reels">
+    {videos.map((v) => {
+      const s = v.source;
+      const thumb = s?.type === "youtube" ? `https://i.ytimg.com/vi/${s.id}/hqdefault.jpg` : s?.type === "file" ? s.poster : undefined;
+      const embed = s?.type === "youtube" ? `https://www.youtube-nocookie.com/embed/${s.id}?autoplay=1&rel=0`
+        : s?.type === "vimeo" ? `https://player.vimeo.com/video/${s.id}?autoplay=1&dnt=1` : undefined;
+      return (
+        <article class="reel" data-reveal>
+          <div class={`frame ${s ? "" : "empty"}`} style={`aspect-ratio:${v.ratio}`} data-embed={embed} data-file={s?.type === "file" ? s.src : undefined}>
+            {thumb && <img src={thumb} alt="" loading="lazy" decoding="async" />}
+            {s
+              ? <button type="button" class="lite" aria-label={`Play: ${v.title.es}`}><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z" /></svg></button>
+              : <Tx class="mono soon" t={ui.soon} />}
+            <span class="mono ratio">{v.ratio.replace("/", ":")}</span>
+          </div>
+          <Tx as="b" t={v.title} />
+          <Tx as="span" t={v.meta} />
+        </article>
+      );
+    })}
+  </div>
+  </>)}
+</section>
+
+<style>
+  .video { padding: 20vh var(--gutter) 10vh }
+  .player { position: relative; margin-top: 48px; aspect-ratio: 16/9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #08090a; transition: border-color .4s, box-shadow .6s; box-shadow: 0 40px 120px -40px color-mix(in srgb, var(--accent) 35%, transparent) }
+  .player:hover { border-color: var(--line-strong) }
+  .unmute { position: absolute; bottom: 72px; right: 16px; z-index: 3; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 99px; font-size: 12px; letter-spacing: .06em; color: var(--ink);
+    background: rgba(13, 14, 16, .72); border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: opacity .4s, transform .4s, background .3s; animation: nudge 2.6s ease-in-out infinite }
+  .unmute svg { width: 18px; height: 18px; color: var(--accent) }
+  .unmute:hover { background: color-mix(in srgb, var(--accent) 25%, rgba(13, 14, 16, .8)) }
+  .player.paused .unmute, .player.sound .unmute { opacity: 0; transform: translateY(6px); pointer-events: none }
+  @keyframes nudge { 0%, 70%, 100% { transform: none } 80% { transform: translateY(-3px) } 90% { transform: translateY(1px) } }
+  .chapters { --accent: #e39a45; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 14px }
+  .chap { position: relative; display: flex; align-items: baseline; gap: 10px; padding: 12px 14px 14px; border-radius: 6px; border: 1px solid var(--line); text-align: left; font-size: 14px; color: var(--dim); overflow: hidden; transition: border-color .3s, color .3s, background .3s }
+  .chap .n { font-size: 11px; color: var(--mute) }
+  .chap i { position: absolute; left: 0; bottom: 0; height: 2px; width: var(--fill, 0%); background: var(--accent) }
+  .chap:hover, .chap:focus-visible { color: var(--ink); border-color: var(--line-strong) }
+  .chap[aria-current="true"] { color: var(--ink); border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: color-mix(in srgb, var(--accent) 7%, transparent) }
+  .chap[aria-current="true"] .n { color: var(--accent) }
+  @media (max-width: 900px) { .chapters { grid-template-columns: repeat(3, minmax(0, 1fr)) } }
+  @media (max-width: 520px) { .chapters { grid-template-columns: repeat(2, minmax(0, 1fr)) } .unmute { bottom: 60px; right: 10px; padding: 8px 12px; font-size: 11px } }
+  @media (prefers-reduced-motion: reduce) { .unmute { animation: none } }
+  .player video { width: 100%; height: 100%; object-fit: cover; background: #000 }
+  .bigplay { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(60% 60% at 50% 50%, rgba(0, 0, 0, .25), transparent); transition: opacity .4s }
+  .player:not(.paused) .bigplay { opacity: 0; pointer-events: none }
+  .ring { width: 96px; height: 96px; border-radius: 50%; border: 1px solid rgba(236, 232, 226, .4); display: grid; place-items: center; position: relative; backdrop-filter: blur(6px); background: rgba(13, 14, 15, .35); transition: transform .4s var(--ease-out) }
+  .ring::before { content: ""; position: absolute; inset: -10px; border-radius: 50%; border: 1px solid var(--accent); animation: ping 2.4s ease-out infinite }
+  .bigplay:hover .ring { transform: scale(1.08) }
+  .ring svg { width: 28px; height: 28px; margin-left: 4px }
+  @keyframes ping { from { transform: scale(.9); opacity: 1 } to { transform: scale(1.35); opacity: 0 } }
+  .controls { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: linear-gradient(transparent, rgba(0, 0, 0, .75)); opacity: 0; transition: opacity .3s }
+  .player:hover .controls, .player.paused .controls, .player:focus-within .controls { opacity: 1 }
+  .controls > button { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; flex: none }
+  .controls > button:hover { background: rgba(255, 255, 255, .12) }
+  .controls svg { width: 18px; height: 18px }
+  .prog { flex: 1; min-width: 0; -webkit-appearance: none; appearance: none; height: 3px; background: linear-gradient(to right, var(--accent) var(--p, 0%), rgba(255, 255, 255, .25) var(--p, 0%)); border-radius: 3px; cursor: pointer }
+  .prog::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--accent) }
+  .prog::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--accent) }
+  .palettes { display: flex; gap: 8px; flex: none }
+  .pal { width: 14px; height: 14px; border-radius: 50%; background: var(--c); opacity: .45; outline: 1px solid transparent; outline-offset: 3px; transition: opacity .2s, outline-color .2s }
+  .pal:hover { opacity: .8 }
+  .pal[aria-pressed="true"] { opacity: 1; outline-color: var(--c) }
+
+  .more { color: var(--dim); font-weight: 500; margin: 56px 0 18px }
+  .reels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px }
+  .reel { border: 1px solid var(--line); border-radius: 6px; padding: 18px; display: grid; gap: 10px; background: rgba(13, 14, 15, .7); align-content: start }
+  .frame { position: relative; max-height: 420px; width: 100%; margin: 0 auto; border-radius: 4px; overflow: hidden; background: #08090a; display: grid; place-items: center }
+  .frame.empty { background: repeating-linear-gradient(135deg, #121416 0 10px, #15181a 10px 20px) }
+  .frame img, .frame :global(iframe), .frame :global(video) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0 }
+  .lite { position: relative; width: 64px; height: 64px; border-radius: 50%; background: rgba(13, 14, 15, .6); border: 1px solid rgba(236, 232, 226, .4); display: grid; place-items: center; backdrop-filter: blur(6px); transition: transform .3s var(--ease-out), background .3s }
+  .lite:hover { transform: scale(1.1); background: var(--amber); color: var(--carbon) }
+  .lite svg { width: 22px; height: 22px; margin-left: 3px }
+  .frame :global(.soon) { color: var(--dim) }
+  .ratio { position: absolute; right: 8px; top: 8px; color: var(--dim); font-size: 10px }
+  .reel :global(b) { font-weight: 600 }
+  .reel > :global(span) { color: var(--dim); font-size: 14px }
+
+  @media (max-width: 980px) {
+    .reels { grid-template-columns: 1fr }
+    .reel { grid-template-columns: 110px 1fr; align-items: center }
+    .frame { grid-row: span 2; max-height: none }
+  }
+  @media (max-width: 480px) { #tc { display: none } }
+</style>

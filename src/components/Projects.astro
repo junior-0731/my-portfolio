@@ -1,0 +1,181 @@
+---
+import Tx from "./Tx.astro";
+import { ui } from "@/data/portfolio";
+import { casos, otros, ui2, tt } from "@/data/casos";
+const [feat, ...resto] = casos as [typeof casos[number], ...typeof casos];
+---
+<section class="work" id="proyectos" data-gl="dim" aria-labelledby="work-title">
+  <div class="work-head">
+    <div>
+      <Tx class="eyebrow mono" as="div" t={ui.wEyebrow} />
+      <Tx as="h2" class="h2" id="work-title" html t={ui.wTitle} />
+    </div>
+    <Tx as="p" t={ui2.wP} />
+  </div>
+
+  <!-- caso principal -->
+  <article class="feat" data-reveal>
+    <div class="feat-copy">
+      <div class="meta mono"><Tx t={feat.kind} /></div>
+      <Tx as="h3" t={feat.title} />
+      <Tx as="p" class="sum" t={feat.summary} />
+      <ul class="mini">{feat.points.es.map((c, i) => <Tx as="li" t={{ es: c, en: feat.points.en[i]! }} />)}</ul>
+      <div class="tags">{feat.stack.map((x) => <span>{x}</span>)}</div>
+    </div>
+
+    <div class="feat-vis" aria-hidden="true">
+      <svg viewBox="0 0 520 300" class="art">
+        <g class="dots">{Array.from({ length: 11 }, (_, r) => Array.from({ length: 19 }, (_, k) => <circle cx={20 + k * 26} cy={20 + r * 26} r="1.2" />))}</g>
+        <rect x="34" y="54" width="132" height="84" rx="10" class="box" /><text x="52" y="86" class="t">App</text><rect x="52" y="100" width="90" height="10" rx="3" class="ln" /><rect x="52" y="116" width="60" height="10" rx="3" class="ln" />
+        <rect x="194" y="108" width="132" height="84" rx="10" class="box hot" /><text x="212" y="140" class="t">Flujos</text><circle cx="222" cy="164" r="5" class="ok" /><circle cx="242" cy="164" r="5" class="ok" /><circle cx="262" cy="164" r="5" class="ok" />
+        <rect x="354" y="54" width="132" height="84" rx="10" class="box" /><text x="372" y="86" class="t">Sistema</text><rect x="372" y="100" width="90" height="10" rx="3" class="ln" /><rect x="372" y="116" width="70" height="10" rx="3" class="ln" />
+        <rect x="194" y="214" width="132" height="54" rx="10" class="box" /><text x="212" y="246" class="t">Datos</text>
+        <path d="M166 96 C 180 96 180 150 194 150" class="arrow" /><path d="M326 150 C 340 150 340 96 354 96" class="arrow" /><path d="M260 192v22" class="arrow" />
+      </svg>
+    </div>
+  </article>
+
+  <!-- casos secundarios -->
+  <div class="cases">
+    {resto.map((c) => (
+      <article class="case" data-reveal>
+        <div class="vis" aria-hidden="true">
+          {c.id === "rpa" ? (
+            <svg viewBox="0 0 440 220" class="art">
+              <rect x="24" y="34" width="132" height="152" rx="8" class="box" />
+              <text x="40" y="62" class="t">Bot</text>
+              <rect x="40" y="78" width="100" height="12" rx="3" class="ln" /><rect x="40" y="98" width="80" height="12" rx="3" class="ln" /><rect x="40" y="118" width="92" height="12" rx="3" class="ln" /><rect x="40" y="138" width="70" height="12" rx="3" class="ln" />
+              <path d="M170 110h60" class="arrow" /><path d="m222 102 10 8-10 8" class="arrow" />
+              <rect x="246" y="34" width="170" height="152" rx="8" class="box hot" />
+              <text x="262" y="62" class="t">PAD</text>
+              <rect x="262" y="76" width="138" height="22" rx="4" class="sub" /><text x="272" y="91" class="s">Main · inicio</text>
+              <rect x="262" y="104" width="138" height="22" rx="4" class="sub" /><text x="272" y="119" class="s">Proceso ↻ 3</text>
+              <rect x="262" y="132" width="138" height="22" rx="4" class="sub" /><text x="272" y="147" class="s">Cierre · log</text>
+              <circle cx="392" cy="87" r="4" class="ok" /><circle cx="392" cy="115" r="4" class="ok" /><circle cx="392" cy="143" r="4" class="ok" />
+              <text x="262" y="176" class="m">10:42:07  OK  · paso 3/3</text>
+            </svg>
+          ) : (
+            <svg viewBox="0 0 440 220" class="art">
+              <g class="grid">{Array.from({ length: 6 }, (_, r) => Array.from({ length: 4 }, (_, k) => <rect x={24 + k * 34} y={40 + r * 24} width="34" height="24" />))}</g>
+              <text x="24" y="30" class="t">Excel + VBA</text>
+              <text x="62" y="81" class="f">=SUMA(</text><text x="96" y="129" class="f">=SI(</text>
+              <path d="M178 112h50" class="arrow" /><path d="m220 104 10 8-10 8" class="arrow" />
+              <rect x="244" y="34" width="174" height="156" rx="8" class="box hot" />
+              <text x="260" y="58" class="t">App web</text>
+              <rect x="260" y="70" width="142" height="18" rx="3" class="sub" /><text x="268" y="83" class="s">Registro</text>
+              <text x="276" y="104" class="m">├ Ítem 1</text><text x="276" y="120" class="m">├ Ítem 2</text><text x="276" y="136" class="m">└ Ítem 3</text>
+              <path d="M260 150h142" class="ln2" /><text x="260" y="172" class="t2">Total ✓ = Excel</text>
+            </svg>
+          )}
+        </div>
+        <div class="body">
+          <div class="meta mono"><Tx t={c.kind} /></div>
+          <Tx as="h3" t={c.title} />
+          <Tx as="p" t={c.summary} />
+          <div class="tags">{c.stack.map((s) => <span>{s}</span>)}</div>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <!-- otros proyectos -->
+  <Tx as="h3" class="mono others-t" t={ui2.others} />
+  <div class="others">
+    {otros.map((o) => (
+      <article class="other" data-reveal>
+        <div class="meta mono"><Tx t={o.kind} /></div>
+        <Tx as="h4" t={tt(o.title)} />
+        <Tx as="p" t={o.desc} />
+        <div class="tags">{o.tags.map((s) => <span>{s}</span>)}</div>
+      </article>
+    ))}
+  </div>
+
+</section>
+
+<style>
+  .work { padding: 12vh var(--gutter) 6vh; position: relative; z-index: 1 }
+  .work-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding-bottom: 48px }
+  .work-head > :global(p) { color: var(--dim); max-width: 38ch }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; color: var(--dim) }
+  .meta :global(.badge) { color: var(--carbon); background: var(--amber); padding: 3px 8px; border-radius: 99px }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px }
+  .tags span { font-family: var(--mono); font-size: 11px; padding: 4px 9px; border: 1px solid var(--line); border-radius: 99px; color: var(--titanium) }
+  .readcase { justify-self: start; display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px; border: 1px solid var(--line-strong); border-radius: 99px; font-weight: 600; font-size: 15px; transition: border-color .25s, background .25s, color .25s }
+  .readcase span { transition: transform .3s var(--ease-out) }
+  .readcase:hover, .readcase:focus-visible { border-color: var(--amber); color: var(--amber) }
+  .readcase:hover span { transform: translateX(4px) }
+
+  /* tarjetas con borde que se ilumina */
+  .feat, .case, .other { border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(180deg, rgba(23, 25, 27, .94), rgba(13, 14, 15, .94)); transition: border-color .35s, box-shadow .35s, transform .35s var(--ease-out) }
+  .case:hover, .case:focus-within, .other:hover, .feat:focus-within { border-color: rgba(227, 154, 69, .45); box-shadow: 0 24px 60px -30px rgba(227, 154, 69, .35) }
+
+  /* caso principal */
+  .feat { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.15fr); gap: clamp(24px, 3vw, 44px); padding: clamp(22px, 3vw, 36px) }
+  .feat-copy { display: grid; gap: 18px; align-content: start }
+  .feat-copy :global(h3) { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(34px, 3.6vw, 54px); line-height: .92; letter-spacing: .005em }
+  .feat-copy :global(.sum) { color: #b9bfc6; font-size: 16px; max-width: 54ch }
+  .mini { list-style: none; display: grid; gap: 10px; font-size: 14.5px; color: var(--dim) }
+  .mini :global(li) { position: relative; padding-left: 20px }
+  .mini :global(li)::before { content: ""; position: absolute; left: 0; top: .62em; width: 9px; height: 1px; background: var(--amber) }
+
+  /* demo */
+  .feat-vis { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: radial-gradient(90% 90% at 70% 20%, rgba(227, 154, 69, .1), transparent 60%), #0b0c0d; display: grid; place-items: center; min-height: 260px }
+  .feat-vis .dots circle { fill: #24282c }
+  .feat:hover .feat-vis .art { transform: scale(1.03) }
+
+  /* casos secundarios */
+  .cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px }
+  .case { display: flex; flex-direction: column; overflow: hidden }
+  .vis { aspect-ratio: 2 / 1; border-bottom: 1px solid var(--line); background: radial-gradient(90% 90% at 70% 20%, rgba(227, 154, 69, .08), transparent 60%), #0b0c0d; display: grid; place-items: center; overflow: hidden }
+  .art { width: 100%; height: 100%; transition: transform .8s var(--ease-out) }
+  .case:hover .art { transform: scale(1.04) }
+  .art .box { fill: #121416; stroke: var(--line-strong) }
+  .art .box.hot { stroke: rgba(227, 154, 69, .65) }
+  .art .ln { fill: #24282c } .art .ln2 { stroke: var(--line-strong) }
+  .art .sub { fill: #1a1d20; stroke: var(--line) }
+  .art .ok { fill: var(--ok) }
+  .art .arrow { fill: none; stroke: var(--amber); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+  .art .t { fill: var(--ink); font: 700 13px var(--mono) } .art .t2 { fill: var(--amber); font: 700 12px var(--mono) }
+  .art .s { fill: #b9bfc6; font: 11px var(--mono) } .art .m { fill: var(--dim); font: 10.5px var(--mono) } .art .f { fill: var(--amber); font: 11px var(--mono) }
+  .art .grid rect { fill: #111315; stroke: #24282c }
+  .case .body { padding: 22px; display: grid; gap: 14px; flex: 1; align-content: start }
+  .case :global(h3), .dlg-in :global(h3) { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(28px, 2.6vw, 38px); line-height: .95 }
+  .case .body > :global(p) { color: var(--dim); font-size: 15px }
+
+  /* otros */
+  .others-t { color: var(--dim); font-weight: 500; margin: 56px 0 16px }
+  .others { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px }
+  .other { padding: 20px; display: grid; gap: 10px; align-content: start }
+  .other :global(h4) { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 26px; line-height: 1 }
+  .other > :global(p) { color: var(--dim); font-size: 14.5px }
+
+  /* diálogo del caso */
+  .case-dlg { margin: auto; width: min(820px, calc(100vw - 24px)); max-height: calc(100svh - 24px); padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--graphite); color: var(--ink); overflow: auto; box-shadow: 0 40px 120px -30px #000 }
+  .case-dlg::backdrop { background: rgba(8, 9, 10, .75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px) }
+  .case-dlg[open] { animation: dlg .45s var(--ease-out) }
+  @keyframes dlg { from { opacity: 0; transform: translateY(18px) scale(.98) } to { opacity: 1; transform: none } }
+  .dlg-in { padding: clamp(20px, 4vw, 40px); display: grid; gap: 22px }
+  .dlg-in header { display: flex; justify-content: space-between; align-items: center; gap: 16px }
+  .dlg-in :global(h3) { font-size: clamp(32px, 4vw, 50px) }
+  .dlg-in :global(h4) { color: var(--amber); font-weight: 500; margin-bottom: 8px }
+  .dlg-in p { color: #c4c9ce }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px }
+  .list { list-style: none; display: grid; gap: 10px }
+  .list :global(li) { position: relative; padding-left: 22px; color: #c4c9ce }
+  .list :global(li)::before { content: ""; position: absolute; left: 0; top: .6em; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--amber) }
+  .decision { border-left: 2px solid var(--amber); padding: 4px 0 4px 18px; background: linear-gradient(90deg, rgba(227, 154, 69, .07), transparent 70%) }
+  .result { border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; background: var(--carbon) }
+  .x { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--dim); transition: color .2s, border-color .2s }
+  .x:hover { color: var(--ink); border-color: var(--amber) }
+  .x svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.8; fill: none }
+
+  @media (max-width: 980px) {
+    .feat { grid-template-columns: 1fr }
+    .cases, .others { grid-template-columns: 1fr }
+  }
+  @media (max-width: 640px) {
+    .work-head { flex-direction: column; align-items: start }
+    .cols { grid-template-columns: 1fr }
+  }
+</style>

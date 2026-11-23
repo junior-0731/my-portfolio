@@ -1,0 +1,30 @@
+---
+import Tx from "./Tx.astro";
+import { ui, manifesto, facts } from "@/data/portfolio";
+---
+<section class="manifesto" data-gl="dim" aria-label="Manifiesto">
+  <Tx class="eyebrow mono" as="div" t={ui.mEyebrow} />
+  <p class="big" id="manifesto" data-words-es={manifesto.es} data-words-en={manifesto.en}>{manifesto.es.replace(/\*/g, "")}</p>
+  <div class="facts">
+    {facts.map((f) => (
+      <div class="fact" data-reveal>
+        <b class="tnum" data-count={f.count}>{f.value}</b>
+        <Tx t={f.t} />
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .manifesto { padding: 22vh var(--gutter) 18vh }
+  .big { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(40px, 6.4vw, 104px); line-height: .95; max-width: 16ch }
+  .big :global(.w) { color: var(--mute); transition: color .25s }
+  .big :global(.w.lit) { color: var(--ink) }
+  .big :global(.w.acc.lit) { color: var(--amber) }
+  .facts { margin-top: 72px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line) }
+  .fact { background: var(--carbon); padding: 26px 22px; display: grid; gap: 6px }
+  .fact b { font-family: var(--display); font-weight: 900; font-size: 64px; line-height: .9 }
+  .fact :global(span) { color: var(--dim); font-size: 14px }
+  @media (max-width: 980px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+  @media (max-width: 640px) { .fact b { font-size: 48px } }
+</style>

@@ -1,0 +1,38 @@
+---
+import Tx from "./Tx.astro";
+import { site, ui } from "@/data/portfolio";
+---
+<nav class="nav" aria-label="Principal">
+  <a class="brand" href="#top"><i></i>{site.initials}</a>
+  <ul>
+    {ui.nav.map((n) => <li><a class="mono" href={n.href}><Tx t={n.t} /></a></li>)}
+  </ul>
+  <div class="nav-right">
+    <div class="lang mono" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+</nav>
+
+<style>
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px var(--gutter) }
+  .nav::before { content: ""; position: absolute; inset: 0; background: linear-gradient(var(--carbon), transparent); opacity: .85; z-index: -1 }
+  .brand { font-family: var(--display); font-weight: 900; font-size: 26px; letter-spacing: .02em; text-decoration: none; display: flex; align-items: center; gap: 10px }
+  .brand i { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); display: inline-block; box-shadow: 0 0 12px var(--amber) }
+  ul { display: flex; gap: 28px; list-style: none }
+  ul a { text-decoration: none; color: var(--dim); transition: color .2s; position: relative }
+  ul a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: var(--amber); transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease-out) }
+  ul a:hover { color: var(--ink) }
+  ul a:hover::after { transform: scaleX(1); transform-origin: left }
+  .nav-right { display: flex; align-items: center; gap: 18px }
+  .clock { color: var(--dim) }
+  .lang { display: flex; border: 1px solid var(--line); border-radius: 99px; padding: 3px }
+  .lang button { padding: 5px 11px; border-radius: 99px; color: var(--dim); transition: background .2s, color .2s }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--carbon) }
+  .progress { position: absolute; left: 0; right: 0; bottom: 0; height: 1px }
+  .progress span { display: block; height: 100%; background: var(--amber); transform: scaleX(0); transform-origin: left }
+  @media (max-width: 980px) { ul { display: none } }
+  @media (max-width: 640px) { .clock { display: none } }
+</style>

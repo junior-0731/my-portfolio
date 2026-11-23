@@ -1,0 +1,100 @@
+---
+import Tx from "./Tx.astro";
+import { whatsapp } from "@/data/casos";
+const t = {
+  hint: { es: "Baja y llena tu café", en: "Scroll to fill your coffee" },
+  title: { es: "¡Tu café está listo! ☕", en: "Your coffee is ready! ☕" },
+  body: {
+    es: "Llenaste la taza recorriendo todo mi portafolio. ¿Nos la tomamos juntos? Escríbeme y brindemos por lo que vamos a construir.",
+    en: "You filled the cup by scrolling through my whole portfolio. Shall we have it together? Message me and let's toast to what we'll build.",
+  },
+  cta: { es: "Brindemos por WhatsApp", en: "Let's toast on WhatsApp" },
+  later: { es: "Luego", en: "Later" },
+  aria: { es: "Taza de café: progreso de lectura", en: "Coffee cup: reading progress" },
+};
+const wa = (s: string) => `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(s)}`;
+const msg = { es: "Hola Junior, ya llené mi taza de café en tu portafolio ☕ ¿Hablamos?", en: "Hi Junior, I filled my coffee cup on your portfolio ☕ Shall we talk?" };
+---
+<div class="coffee" id="coffee" data-wa-es={wa(msg.es)} data-wa-en={wa(msg.en)}>
+  <div class="bubble" id="coffee-bubble" role="dialog" aria-labelledby="coffee-t" hidden>
+    <button type="button" class="x" id="coffee-x" aria-label="Cerrar">×</button>
+    <Tx as="b" id="coffee-t" t={t.title} />
+    <Tx as="p" t={t.body} />
+    <div class="acts">
+      <a class="go" id="coffee-go" href={wa(msg.es)} target="_blank" rel="noopener"><svg class="clink" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h5l-.6 5.2a2 2 0 0 1-3.8 0Z M7.5 10.5V18 M5 18h5 M14 3h5l-.6 5.2a2 2 0 0 1-3.8 0Z M16.5 10.5V18 M14 18h5" /></svg><Tx t={t.cta} /></a>
+      <button type="button" class="later" id="coffee-later"><Tx t={t.later} /></button>
+    </div>
+  </div>
+
+  <button type="button" class="cup" id="coffee-cup" aria-describedby="coffee-pct">
+    <Tx class="sr-only" t={t.aria} />
+    <span class="tip mono"><Tx t={t.hint} /></span>
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <clipPath id="cup-in"><path d="M15 22h30l-3.2 27.5A5 5 0 0 1 36.8 54H23.2a5 5 0 0 1-5-4.5Z" /></clipPath>
+      </defs>
+      <g class="steam"><path d="M24 17c-3-3 3-5 0-9" /><path d="M31 17c-3-3 3-5 0-9" /><path d="M38 17c-3-3 3-5 0-9" /></g>
+      <g clip-path="url(#cup-in)">
+        <rect x="10" y="10" width="44" height="50" class="cup-bg" />
+        <g class="liquid" id="coffee-liquid">
+          <path class="wave" d="M-40 0 q 8 -3 16 0 t 16 0 t 16 0 t 16 0 t 16 0 t 16 0 t 16 0 t 16 0 V40 H-40 Z" />
+          <rect class="crema" x="0" y="-1" width="64" height="2.2" />
+        </g>
+      </g>
+      <path class="cup-line" d="M15 22h30l-3.2 27.5A5 5 0 0 1 36.8 54H23.2a5 5 0 0 1-5-4.5Z" />
+      <path class="cup-line" d="M44.5 27h3.5a5.5 5.5 0 0 1 0 11h-5" />
+      <path class="saucer" d="M11 57.5h38" />
+    </svg>
+    <span class="pct mono" id="coffee-pct">0%</span>
+  </button>
+</div>
+
+<style>
+  .coffee { position: fixed; right: clamp(14px, 2.4vw, 32px); bottom: clamp(14px, 2.4vw, 32px); z-index: 70; display: grid; justify-items: end; gap: 12px;
+    opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .5s, transform .5s var(--ease-out) }
+  .coffee.on { opacity: 1; transform: none; pointer-events: auto }
+
+  .cup { position: relative; width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line-strong);
+    background: rgba(15, 16, 18, .82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: border-color .4s, box-shadow .4s, transform .3s var(--ease-out) }
+  .cup:hover, .cup:focus-visible { border-color: var(--amber); transform: translateY(-2px) }
+  .cup svg { width: 50px; height: 50px; overflow: visible }
+  .cup-bg { fill: rgba(236, 232, 226, .04) }
+  .cup-line { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round }
+  .saucer { stroke: var(--dim); stroke-width: 2.4; stroke-linecap: round }
+  .liquid { transform: translateY(56px); transition: transform .6s var(--ease-out) }
+  .wave { fill: #6b4226; animation: wave 2.4s linear infinite }
+  .crema { fill: #c98a52; opacity: .8 }
+  @keyframes wave { to { transform: translateX(32px) } }
+  .steam path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; opacity: 0 }
+  .pct { position: absolute; bottom: -7px; left: 50%; translate: -50% 0; font-size: 10px; padding: 2px 7px; border-radius: 99px; background: #17191b; border: 1px solid var(--line-strong); color: var(--dim); letter-spacing: .04em }
+  .tip { position: absolute; right: calc(100% + 12px); top: 50%; translate: 0 -50%; white-space: nowrap; font-size: 11px; padding: 7px 12px; border-radius: 99px; background: #17191b; border: 1px solid var(--line-strong); color: var(--ink);
+    opacity: 0; transform: translateX(6px); transition: opacity .3s, transform .3s; pointer-events: none }
+  .cup:hover .tip, .cup:focus-visible .tip { opacity: 1; transform: none }
+
+  /* taza llena */
+  .coffee.full .cup { border-color: var(--amber); box-shadow: 0 0 0 6px rgba(227, 154, 69, .12), 0 20px 50px -20px var(--amber) }
+  .coffee.full .pct { color: var(--carbon); background: var(--amber); border-color: var(--amber) }
+  .coffee.full .steam path { animation: steam 2.2s ease-in-out infinite }
+  .coffee.full .steam path:nth-child(2) { animation-delay: .5s } .coffee.full .steam path:nth-child(3) { animation-delay: 1s }
+  @keyframes steam { 0% { opacity: 0; transform: translateY(4px) } 40% { opacity: .75 } 100% { opacity: 0; transform: translateY(-8px) } }
+  .coffee.pop .cup { animation: pop .6s var(--ease-out) }
+  @keyframes pop { 30% { transform: scale(1.18) rotate(-8deg) } 60% { transform: scale(.96) rotate(5deg) } }
+
+  .bubble { position: relative; width: min(340px, calc(100vw - 28px)); padding: 20px 20px 18px; border-radius: 14px; border: 1px solid rgba(227, 154, 69, .5);
+    background: linear-gradient(180deg, #1a1c1f, #121416); box-shadow: 0 30px 80px -30px rgba(227, 154, 69, .5); display: grid; gap: 10px; transform-origin: 90% 100%; animation: bubble .5s var(--ease-out) }
+  .bubble[hidden] { display: none }
+  .bubble::after { content: ""; position: absolute; right: 30px; bottom: -7px; width: 12px; height: 12px; rotate: 45deg; background: #121416; border-right: 1px solid rgba(227, 154, 69, .5); border-bottom: 1px solid rgba(227, 154, 69, .5) }
+  @keyframes bubble { from { opacity: 0; transform: translateY(10px) scale(.92) } }
+  .bubble :global(b) { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 26px; line-height: 1; padding-right: 26px }
+  .bubble :global(p) { color: #c4c9ce; font-size: 14.5px }
+  .acts { display: flex; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap }
+  .go { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 99px; background: var(--amber); color: var(--carbon); font-weight: 600; font-size: 14px; text-decoration: none; transition: background .3s }
+  .go:hover { background: var(--ink) }
+  .clink { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; animation: clink 1.4s ease-in-out infinite }
+  @keyframes clink { 0%, 60%, 100% { transform: rotate(0) } 70% { transform: rotate(-14deg) } 80% { transform: rotate(10deg) } }
+  .later { font-size: 13.5px; color: var(--dim); padding: 8px 6px } .later:hover { color: var(--ink) }
+  .x { position: absolute; top: 8px; right: 10px; width: 30px; height: 30px; font-size: 22px; line-height: 1; color: var(--dim); border-radius: 50% } .x:hover { color: var(--ink) }
+
+  @media (max-width: 640px) { .cup { width: 60px; height: 60px } .cup svg { width: 40px; height: 40px } .tip { display: none } }
+  @media (prefers-reduced-motion: reduce) { .wave, .clink, .coffee.full .steam path { animation: none } .coffee.full .steam path { opacity: .6 } .bubble, .coffee.pop .cup { animation: none } .liquid { transition: none } }
+</style>
